@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    乾颐堂图标(数据源自于Ajax)
+{% endblock title %}
+
+{% block js %}
+    <!-- 加载Chart.js的JS文件 -->
+    <!-- 最新的Chart JS 文件 https://cdnjs.com/libraries/Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <!-- 加载本项目创建的chart_json_functions.js的JS文件-->
+    {% load static %}
+    <script src="{% static "js/chart_json_functions.js" %}"></script>
+    <script src="{% static "js/jquery.min.js" %}"></script>
+{% endblock js %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="jumbotron">
+      <h1 style="color: #666666">乾颐堂图表测试(Ajax)</h1>
+      <p>乾颐堂现任明教教主Python网络编程第二部分HTTP协议图表测试</p>
+    </div>
+
+    {# 第一行 #}
+     <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">线性图表测试(JSON刷新数据) <button onClick="updatachart1();">刷新</button> </div>
+                <div class="card-body">
+                    <!-- 图表会被绘制在下面的canvas内 -->
+                    <canvas id="chart1"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">柱状图表测试(JSON刷新数据)</div>
+                <div class="card-body">
+                    <!-- 图表会被绘制在下面的canvas内 -->
+                    <canvas id="chart2"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        {# 使用ajax获取数据并渲染 #}
+        get_json_render_chart('/ajax/line/1', "chart1", "line", "CPU利用率");
+        get_json_render_chart('/ajax/bar/2', "chart2", "bar","MEM利用率");
+    </script>
+
+    {# 手动刷新chart1 #}
+    <script type="text/javascript">
+        function updatachart1()
+        {
+            get_json_render_chart('/ajax/line/1', "chart1", "line", "CPU利用率");
+        }
+    </script>
+
+    {# 第二行 #}
+    <div class="row py-2">
+        <div class="col-md-4 py-1">
+            <div class="card">
+                <div class="card-header">饼状图表测试1</div>
+                <div class="card-body">
+                    <canvas id="chDonut1" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 py-1">
+            <div class="card">
+                <div class="card-header">饼状图表测试2</div>
+                <div class="card-body">
+                    <canvas id="chDonut2" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 py-1">
+            <div class="card">
+                <div class="card-header">饼状图表测试2</div>
+                <div class="card-body">
+                    <canvas id="chDonut3" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" language="javascript">
+        {# 使用ajax获取数据并渲染 #}
+        get_json_render_chart('/ajax/pie/3', "chDonut1", "pie");
+        get_json_render_chart('/ajax/pie/4', "chDonut2", "pie");
+        get_json_render_chart('/ajax/pie/5', "chDonut3", "pie");
+    </script>
+</div>
+{% endblock body %}

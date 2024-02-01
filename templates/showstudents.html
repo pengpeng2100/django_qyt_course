@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    乾颐堂学员信息查询
+{% endblock title %}
+
+{% block head %}
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+{% endblock head %}
+
+{% block js %}
+    <script src="http://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+{% endblock js %}
+
+{% block body %}
+    <div class="container">
+        <br><h2 style="color: #666666">学员信息查询</h2>
+        {% include "three_messages.html" %}
+        {# 创建显示学员信息的Table,注意id="mytable", 后续DataTable JavaScript就对这个ID的Table进行渲染优化 #}
+        <table class="table table-bordered" id="mytable">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">学员唯一ID</th>
+                    <th scope="col">姓名</th>
+                    <th scope="col">电话</th>
+                    <th scope="col">QQ</th>
+                    <th scope="col">邮件</th>
+                    <th scope="col">方向</th>
+                    <th scope="col">班主任</th>
+                    <th scope="col">缴费</th>
+                    <th scope="col">日期</th>
+                    <th scope="col">操作</th>
+                </tr>
+            </thead>
+            <tbody id="mytable">
+                {% for student in students_list %}
+                    <tr>
+                        {# 通过forloop.counter来显示行号,请注意这个不是学员唯一ID #}
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ student.id }}</td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.phone_number }}</td>
+                        <td>{{ student.qq_number }}</td>
+                        <td>{{ student.mail }}</td>
+                        <td>{{ student.direction }}</td>
+                        <td>{{ student.class_adviser }}</td>
+                        <td>{{ student.payed }}</td>
+                        <td>{{ student.date|date:'Y-m-d' }}</td>
+                        {# 添加删除和编辑按钮 #}
+                        {# href嵌入传入的删除和编辑的超链接 #}
+                        {# onclick="return confirmAct() 用于在删除对象之前显示确认删除的警告信息 #}
+                        {# data-toggle="tooltip" data-placement="top" title="删除此学员信息" 用于显示按钮的提示信息 #}
+                        {# class="badge badge-danger" class="badge badge-success" bootstrap渲染按钮的类型 #}
+                        <td>
+                            <a href="{{ student.delete_url }}" onclick="return confirmAct();" data-toggle="tooltip" data-placement="top" title="删除此学员信息" class="badge badge-danger">删除</a>
+                            <a href="{{ student.edit_url }}"  data-toggle="tooltip" data-placement="top" title="编辑此学员信息" class="badge badge-success">编辑</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {# DataTable渲染显示客户信息的Table #}
+    {# 需要加载如下的CSS和JS #}
+    {# <link rel="stylesheet" href="http://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"> #}
+    {# <script src="http://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script> #}
+    <script>
+        $(document).ready( function () {
+            $('#mytable').DataTable();
+        } );
+    </script>
+
+    {# 提示删除确认警告的JavaScript #}
+    <script type="text/javascript">
+        function confirmAct()
+        {
+            if(confirm('是否确定删除此学员?'))
+            {
+                return true;
+            }
+            return false;
+        }
+    </script>
+
+    {# DataTable中点击任何一个条目变深色,表示被选中功能的JavaScript #}
+    <script>
+    $(document).ready(function() {
+        var table = $('#mytable').DataTable();
+
+        $('#mytable tbody').on( 'click', 'tr', function () {
+            if ( $(this).hasClass('selected') ) {
+                $(this).removeClass('selected');
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        } );
+
+        $('#button').click( function () {
+            table.row('.selected').remove().draw( false );
+        } );
+    } );
+    </script>
+{% endblock body %}

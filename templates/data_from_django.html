@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    乾颐堂图标(数据源自于Django)
+{% endblock title %}
+
+{% block js %}
+    <!-- 加载Chart.js的JS文件 -->
+    <!-- 最新的Chart JS 文件 https://cdnjs.com/libraries/Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <!-- 加载本项目创建的chart_json_functions.js的JS文件-->
+    {% load static %}
+    <script src="{% static "js/chart_json_functions.js" %}"></script>
+{#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>#}
+{% endblock js %}
+
+{% block body %}
+    <div class="container-fluid">
+    <div class="jumbotron">
+      <h1 style="color: #666666">乾颐堂图表测试(Django)</h1>
+      <p>乾颐堂现任明教教主Python网络编程第二部分HTTP协议图表测试</p>
+    </div>
+
+
+     <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">线性图表测试(Django数据)</div>
+                <div class="card-body">
+                    <!-- 图表会被绘制在下面的canvas内 -->
+                    <canvas id="chart1"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">柱状图表测试(静态数据)</div>
+                <div class="card-body">
+                    <!-- 图表会被绘制在下面的canvas内 -->
+                    <canvas id="chart2"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+    {# 从Django获取数据 #}
+    {# | safe filter的作用是信任Django的数据[不安全的字符(<, >, ', " or &)],不对内容进行转义 #}
+    chart_line("chart1", "{{ chart1_label }}", {{ chart1_time|safe }}, {{ chart1_data|safe }}, {{ chart1_color|safe }});
+
+    {# 手工初始化数据 #}
+    {#chart_line("chart1",#}
+    {#           "CPU利用率",#}
+    {#          ['2018-8-1', '2018-8-2', '2018-8-3', '2018-8-4', '2018-8-5', '2018-8-6'],#}
+    {#          [1, 20, 30, 10, 42, 66],#}
+    {#          ['#007bff']);#}
+
+    {# 手工初始化数据 #}
+    chart_bar("chart2",
+               "内存利用率",
+              ['2018-8-1', '2018-8-2', '2018-8-3', '2018-8-4', '2018-8-5', '2018-8-6'],
+              [1, 20, 30, 10, 42, 66],
+              ['#007bff']);
+
+</script>
+
+<div class="row py-2">
+    <div class="col-md-4 py-1">
+        <div class="card">
+            <div class="card-header">饼状图表测试1</div>
+            <div class="card-body">
+                <canvas id="chDonut1" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 py-1">
+        <div class="card">
+            <div class="card-header">饼状图表测试2</div>
+            <div class="card-body">
+                <canvas id="chDonut2" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 py-1">
+        <div class="card">
+            <div class="card-header">饼状图表测试2</div>
+            <div class="card-body">
+                <canvas id="chDonut3" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" language="javascript">
+    {# 手工初始化数据 #}
+    chart_pie("chDonut1",
+              ['安全', '数据中心', '教主VIP', '路由交换', '无线', '华为'],
+              [20, 30, 70, 40, 20, 10],
+              ['#007bff', '#28a745', '#333333', '#c3e6cb', '#dc3545', '#6c757d']);
+    chart_pie("chDonut2",
+              ['安全', '数据中心', '教主VIP', '路由交换', '无线', '华为'],
+              [20, 30, 70, 40, 20, 10],
+              ['#007bff', '#28a745', '#333333', '#c3e6cb', '#dc3545', '#6c757d']);
+    chart_pie("chDonut3",
+              ['安全', '数据中心', '教主VIP', '路由交换', '无线', '华为'],
+              [20, 30, 70, 40, 20, 10],
+              ['#007bff', '#28a745', '#333333', '#c3e6cb', '#dc3545', '#6c757d']);
+</script>
+
+</div>
+{% endblock body %}

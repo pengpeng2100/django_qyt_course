@@ -1,0 +1,39 @@
+{%  extends 'base.html' %}
+
+{% block title %}
+	乾颐堂Django
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <h1>{{ courseinfo.方向}}</h1>
+        {{ qyt_date | date:'Y-m-d H:i' }}
+        <p style="color: blue">摘要:{{ courseinfo.摘要 }}</p>
+        <p style="color: red">授课老师:{{ courseinfo.授课老师 }}</p>
+        <p style="color: green">授课方式:{{ courseinfo.授课方式 }}</p>
+        {% if courseinfo.课程特色 %}
+            <p style="color: darkmagenta">课程特色:{{ courseinfo.课程特色 }}</p>
+        {% endif %}
+        {% if courseinfo.是否提供实验环境 %}
+            <p style="color: darkmagenta">是否提供实验环境: 提供试验台</p>
+        {% else %}
+            <p style="color: darkmagenta">是否提供实验环境: 不提供试验台</p>
+        {% endif %}
+        <p>具体课程如下:</p>
+        <ol>
+            {% for x in courseinfo.具体课程 %}
+                <li>{{ x | lower }}</li>
+            {% endfor %}
+        </ol>
+      {# 单行注释 #}
+      {% comment %}
+        模板过滤器:对模板变量的二次加工
+        1.lower:将模板变量的值都变成小写
+        2.upper:将模板变量的值都变成大写
+        3.trucatewords:截取前n个单词
+        4.addslashes:在任何的反斜杠,单引号或双引号前面添加反斜杠
+        5.date:按指定的格式化字符串参数格式化date或datetime对象
+        6.length:用于返回模板变量的长度
+      {% endcomment %}
+    </div>
+{% endblock %}
